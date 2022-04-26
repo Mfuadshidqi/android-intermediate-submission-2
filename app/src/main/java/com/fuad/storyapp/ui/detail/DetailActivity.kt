@@ -6,7 +6,7 @@ import com.bumptech.glide.Glide
 import com.fuad.storyapp.data.response.ListStoryItem
 import com.fuad.storyapp.databinding.ActivityDetailBinding
 import com.fuad.storyapp.utils.setLocalDateFormat
-//percobaan commit dan kembali
+
 class DetailActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityDetailBinding
