@@ -7,7 +7,6 @@ import com.bumptech.glide.Glide
 import com.fuad.storyapp.data.response.ListStoryItem
 import com.fuad.storyapp.databinding.ItemStoryBinding
 
-//commit di awal
 class ListStoryAdapter(private val listStory: ArrayList<ListStoryItem>) :
     RecyclerView.Adapter<ListStoryAdapter.ListViewHolder>() {
 
