@@ -30,4 +30,10 @@ data class ListStoryItem(
 
 	@field:SerializedName("description")
 	val description: String? = null,
+
+	@field:SerializedName("lon")
+	val lon: Double?,
+
+	@field:SerializedName("lat")
+	val lat: Double?
 ) : Parcelable

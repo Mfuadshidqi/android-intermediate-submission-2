@@ -36,4 +36,5 @@
     <string name="input_your_image">Please upload your image first!</string>
     <string name="created_at">Created At</string>
     <string name="title_activity_maps">MapsActivity</string>
+    <string name="maps">Maps</string>
 </resources>

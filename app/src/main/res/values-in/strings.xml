@@ -35,4 +35,6 @@
     <string name="choose_picture">Pilih Gambar</string>
     <string name="input_your_image">Masukan gambar terlebih dahulu !</string>
     <string name="created_at">Diunggah pada </string>
+    <string name="title_activity_maps">Peta Activity</string>
+    <string name="maps">Peta</string>
 </resources>
