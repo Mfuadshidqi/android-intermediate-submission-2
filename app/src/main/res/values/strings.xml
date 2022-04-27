@@ -37,4 +37,9 @@
     <string name="created_at">Created At</string>
     <string name="title_activity_maps">MapsActivity</string>
     <string name="maps">Maps</string>
+    <string name="share_my_location">Share My Location</string>
+    <string name="location_not_found">Location is not found. Try Again</string>
+    <string name="my_location">My Location</string>
+    <string name="map_style_error">Style parsing failed.</string>
+    <string name="map_style_nope">\"Can\'t find style. Error: \"</string>
 </resources>

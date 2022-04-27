@@ -8,6 +8,7 @@ import com.fuad.storyapp.data.repository.UserRepository
 import com.fuad.storyapp.di.StoryInjection
 import com.fuad.storyapp.di.UserInjection
 import com.fuad.storyapp.ui.main.MainViewModel
+import com.fuad.storyapp.ui.map.MapsViewModel
 import com.fuad.storyapp.ui.story.StoryViewModel
 
 class StoryViewModelFactory private constructor(private val userRepo: UserRepository, private val storyRepo: StoryRepository) :
@@ -20,6 +21,9 @@ class StoryViewModelFactory private constructor(private val userRepo: UserReposi
             }
             modelClass.isAssignableFrom(StoryViewModel::class.java) -> {
                 StoryViewModel(userRepo, storyRepo) as T
+            }
+            modelClass.isAssignableFrom(MapsViewModel::class.java) -> {
+                MapsViewModel(storyRepo) as T
             }
             else -> {
                 throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)

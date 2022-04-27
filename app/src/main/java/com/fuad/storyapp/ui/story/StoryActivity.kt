@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
+import android.location.Location
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -27,6 +28,10 @@ import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
 import com.fuad.storyapp.data.Result
+import com.fuad.storyapp.ui.map.MapsActivity
+import com.fuad.storyapp.ui.story.StoryActivity.Companion.EXTRA_TOKEN
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 
 class StoryActivity : AppCompatActivity() {
 
@@ -35,11 +40,17 @@ class StoryActivity : AppCompatActivity() {
     private lateinit var token: String
     private lateinit var currentPhotoPath: String
     private var getFile: File? = null
+    //inisialisai lokasi
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private var location: Location? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityStoryBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        token = intent.getStringExtra(MapsActivity.EXTRA_TOKEN).toString()
+        title = "Upload Story"
 
         if (!allPermissionsGranted()) {
             ActivityCompat.requestPermissions(
@@ -50,10 +61,50 @@ class StoryActivity : AppCompatActivity() {
         }
 
         setupViewModel()
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         binding.btnCamera.setOnClickListener { startTakePhoto() }
         binding.btnGallery.setOnClickListener { startGallery() }
         binding.btnUpload.setOnClickListener { uploadImage() }
+        binding.switchLocation.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked){
+                getMyLocation()
+            }else {
+                location = null
+            }
+        }
     }
+
+    private fun getMyLocation() {
+        if (ContextCompat.checkSelfPermission(
+                this.applicationContext,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            fusedLocationClient.lastLocation.addOnSuccessListener { loc ->
+                if (loc != null) {
+                    this.location = loc
+                } else {
+                    binding.switchLocation.isChecked = false
+                    Toast.makeText(
+                        this,
+                        resources.getString(R.string.location_not_found),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        } else {
+            requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+        }
+    }
+
+    private val requestPermissionLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted: Boolean ->
+            if (isGranted) {
+                getMyLocation()
+            }
+        }
 
     private fun setupViewModel() {
         val factory: StoryViewModelFactory = StoryViewModelFactory.getInstance(this)
@@ -61,15 +112,6 @@ class StoryActivity : AppCompatActivity() {
             this,
             factory
         )[StoryViewModel::class.java]
-
-        storyViewModel.getToken().observe(this){ token ->
-            if (token.isEmpty()){
-                startActivity(Intent(this, LoginActivity::class.java))
-                finish()
-            }else{
-                this.token = token
-            }
-        }
     }
 
     override fun onRequestPermissionsResult(
@@ -182,10 +224,9 @@ class StoryActivity : AppCompatActivity() {
         }
     }
 
-
     companion object {
         private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
         private const val REQUEST_CODE_PERMISSIONS = 10
+        const val EXTRA_TOKEN = "extra_token"
     }
-
 }

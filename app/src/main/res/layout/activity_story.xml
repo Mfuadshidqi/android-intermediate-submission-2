@@ -54,6 +54,15 @@
         app:layout_constraintStart_toStartOf="@+id/preview_image_view"
         app:layout_constraintTop_toBottomOf="@id/btn_gallery" />
 
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/switch_location"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/share_my_location"
+        app:layout_constraintEnd_toEndOf="@+id/preview_image_view"
+        app:layout_constraintStart_toStartOf="@+id/preview_image_view"
+        app:layout_constraintTop_toBottomOf="@+id/edt_desc" />
+
     <Button
         android:id="@+id/btn_upload"
         android:layout_width="0dp"

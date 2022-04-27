@@ -18,15 +18,15 @@ class DetailActivity : AppCompatActivity() {
 
         title = "Story Detail"
 
-        val story = intent.getParcelableExtra<ListStoryItem>(EXTRA_STORY)
-        binding.apply {
-            tvUsername.text = story?.name
-            tvCreatedAt.setLocalDateFormat(story?.createdAt.toString())
-            tvDescription.text = story?.description
-        }
-        Glide.with(this)
-            .load(story?.photoUrl)
-            .into(binding.imgAvatar)
+//        val story = intent.getParcelableExtra<ListStoryItem>(EXTRA_STORY)
+//        binding.apply {
+//            tvUsername.text = story?.name
+//            tvCreatedAt.setLocalDateFormat(story?.createdAt.toString())
+//            tvDescription.text = story?.description
+//        }
+//        Glide.with(this)
+//            .load(story?.photoUrl)
+//            .into(binding.imgAvatar)
     }
 
     companion object {

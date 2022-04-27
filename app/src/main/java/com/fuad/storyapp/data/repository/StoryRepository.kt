@@ -24,6 +24,16 @@ class StoryRepository(private val apiService: ApiService) {
         }
     }
 
+    fun getStoriesLocation(token: String) : LiveData<Result<StoriesResponse>> = liveData{
+        emit(Result.Loading)
+        try {
+            val client = apiService.getStories("Bearer $token", location = 1)
+            emit(Result.Success(client))
+        }catch (e : Exception){
+            emit(Result.Error(e.message.toString()))
+        }
+    }
+
     fun uploadStory(token: String, imageMultipart: MultipartBody.Part, desc: RequestBody): LiveData<Result<UploadStoryResponse>> = liveData{
         emit(Result.Loading)
         try {
