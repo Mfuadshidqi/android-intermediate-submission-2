@@ -1,4 +1,4 @@
-package com.fuad.storyapp.data.retrofit
+package com.fuad.storyapp.data.remote.retrofit
 
 import androidx.viewbinding.BuildConfig
 import okhttp3.OkHttpClient

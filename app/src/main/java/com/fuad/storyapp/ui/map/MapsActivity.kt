@@ -16,7 +16,6 @@ import com.fuad.storyapp.R
 import com.fuad.storyapp.databinding.ActivityMapsBinding
 import com.fuad.storyapp.utils.MediaUtils
 import com.google.android.gms.location.FusedLocationProviderClient
-
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback

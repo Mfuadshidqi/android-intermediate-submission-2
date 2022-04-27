@@ -2,24 +2,20 @@ package com.fuad.storyapp.ui.main
 
 import android.content.Intent
 import android.content.res.Configuration
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
-import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.fuad.storyapp.R
 import com.fuad.storyapp.adapter.ListStoryAdapter
+import com.fuad.storyapp.adapter.LoadingStateAdapter
 import com.fuad.storyapp.databinding.ActivityMainBinding
 import com.fuad.storyapp.ui.factory.StoryViewModelFactory
 import com.fuad.storyapp.ui.login.LoginActivity
-import com.fuad.storyapp.data.Result
-import com.fuad.storyapp.data.response.ListStoryItem
-import com.fuad.storyapp.ui.detail.DetailActivity
 import com.fuad.storyapp.ui.map.MapsActivity
 import com.fuad.storyapp.ui.story.StoryActivity
 
@@ -60,53 +56,27 @@ class MainActivity : AppCompatActivity() {
             factory
         )[MainViewModel::class.java]
 
-        mainViewModel.isLogin().observe(this){
-            if (!it){
+        mainViewModel.isLogin().observe(this) {
+            if (!it) {
                 startActivity(Intent(this, LoginActivity::class.java))
                 finish()
             }
         }
-        mainViewModel.getToken().observe(this){ token ->
+        mainViewModel.getToken().observe(this) { token ->
             this.token = token
-            if (token.isNotEmpty()){
-                mainViewModel.getStories(token).observe(this){result ->
-                    if (result != null){
-                        when(result) {
-                            is Result.Loading -> {
-                                binding.progressBar.visibility = View.VISIBLE
-                            }
-                            is Result.Success -> {
-                                binding.progressBar.visibility = View.GONE
-                                val stories = result.data.listStory
-                                val listStoryAdapter = ListStoryAdapter(stories as ArrayList<ListStoryItem>)
-                                binding.rvStories.adapter = listStoryAdapter
-
-                                listStoryAdapter.setOnItemClickCallback(object : ListStoryAdapter.OnItemClickCallback {
-                                    override fun onItemClicked(data: ListStoryItem) {
-                                       // showSelectedStory(data)
-                                    }
-                                })
-                            }
-                            is Result.Error -> {
-                                binding.progressBar.visibility = View.GONE
-                                Toast.makeText(
-                                    this,
-                                    "Failure : " + result.error,
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                        }
+            if (token.isNotEmpty()) {
+                val adapter = ListStoryAdapter()
+                binding.rvStories.adapter = adapter.withLoadStateFooter(
+                    footer = LoadingStateAdapter {
+                        adapter.retry()
                     }
+                )
+                mainViewModel.getStories(token).observe(this) { result ->
+                    adapter.submitData(lifecycle, result)
                 }
             }
         }
     }
-
-//    private fun showSelectedStory(story: ListStoryItem) {
-//        val intent = Intent(this, DetailActivity::class.java)
-//        intent.putExtra(DetailActivity.EXTRA_STORY, story)
-//        startActivity(intent)
-//    }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater = menuInflater

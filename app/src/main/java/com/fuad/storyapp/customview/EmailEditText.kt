@@ -8,7 +8,7 @@ import android.util.AttributeSet
 import android.util.Patterns
 import com.fuad.storyapp.R
 
-class EmailEditText: NameEditText {
+class EmailEditText : NameEditText {
 
     constructor(context: Context) : super(context) {
         init()
@@ -18,7 +18,11 @@ class EmailEditText: NameEditText {
         init()
     }
 
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
+    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    ) {
         init()
     }
 
@@ -29,11 +33,13 @@ class EmailEditText: NameEditText {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
                 // Do nothing.
             }
+
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                if (!isValidEmail(text.toString())){
+                if (!isValidEmail(text.toString())) {
                     error = resources.getString(R.string.invalid_email)
                 }
             }
+
             override fun afterTextChanged(s: Editable) {
                 // Do nothing.
             }

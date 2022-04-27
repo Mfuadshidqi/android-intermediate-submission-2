@@ -1,4 +1,4 @@
-package com.fuad.storyapp.data.response
+package com.fuad.storyapp.data.remote.response
 
 import com.google.gson.annotations.SerializedName
 

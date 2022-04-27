@@ -6,32 +6,32 @@ import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
 import android.location.Location
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.lifecycle.ViewModelProvider
 import com.fuad.storyapp.R
+import com.fuad.storyapp.data.Result
 import com.fuad.storyapp.databinding.ActivityStoryBinding
 import com.fuad.storyapp.ui.factory.StoryViewModelFactory
-import com.fuad.storyapp.ui.login.LoginActivity
+import com.fuad.storyapp.ui.map.MapsActivity
 import com.fuad.storyapp.utils.MediaUtils
+import com.fuad.storyapp.utils.animateVisibility
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
-import com.fuad.storyapp.data.Result
-import com.fuad.storyapp.ui.map.MapsActivity
-import com.fuad.storyapp.ui.story.StoryActivity.Companion.EXTRA_TOKEN
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
 
 class StoryActivity : AppCompatActivity() {
 
@@ -40,7 +40,6 @@ class StoryActivity : AppCompatActivity() {
     private lateinit var token: String
     private lateinit var currentPhotoPath: String
     private var getFile: File? = null
-    //inisialisai lokasi
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private var location: Location? = null
 
@@ -66,9 +65,9 @@ class StoryActivity : AppCompatActivity() {
         binding.btnGallery.setOnClickListener { startGallery() }
         binding.btnUpload.setOnClickListener { uploadImage() }
         binding.switchLocation.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked){
+            if (isChecked) {
                 getMyLocation()
-            }else {
+            } else {
                 location = null
             }
         }
@@ -142,7 +141,7 @@ class StoryActivity : AppCompatActivity() {
             if (description.isEmpty()){
                 binding.edtDesc.error = resources.getString(R.string.message_validation, "description")
             }else{
-                binding.progressBar.visibility = View.VISIBLE
+                showLoading(true)
                 val file = MediaUtils.reduceFileImage(getFile as File)
                 val descMedia = description.toRequestBody("text/plain".toMediaType())
                 val requestImageFile = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
@@ -151,19 +150,25 @@ class StoryActivity : AppCompatActivity() {
                     file.name,
                     requestImageFile
                 )
-                storyViewModel.uploadStory(token, imageMultipart, descMedia).observe(this){ result ->
+                var lat: RequestBody? = null
+                var lon: RequestBody? = null
+                if (location != null){
+                    lat = location?.latitude.toString().toRequestBody("text/plain".toMediaType())
+                    lon = location?.longitude.toString().toRequestBody("text/plain".toMediaType())
+                }
+                storyViewModel.uploadStory(token, imageMultipart, descMedia, lat, lon).observe(this){ result ->
                     if (result != null){
                         when(result) {
                             is Result.Loading -> {
-                                binding.progressBar.visibility = View.VISIBLE
+                                showLoading(true)
                             }
                             is Result.Success -> {
-                                binding.progressBar.visibility = View.GONE
+                                showLoading(false)
                                 Toast.makeText(this, result.data.message, Toast.LENGTH_SHORT).show()
                                 finish()
                             }
                             is Result.Error -> {
-                                binding.progressBar.visibility = View.GONE
+                                showLoading(false)
                                 Toast.makeText(
                                     this,
                                     "Failure : " + result.error,
@@ -221,6 +226,22 @@ class StoryActivity : AppCompatActivity() {
             getFile = myFile
             val result = BitmapFactory.decodeFile(myFile.path)
             binding.previewImageView.setImageBitmap(result)
+        }
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        binding.apply {
+            btnCamera.isEnabled = !isLoading
+            btnGallery.isEnabled = !isLoading
+            btnUpload.isEnabled = !isLoading
+            edtDesc.isEnabled = !isLoading
+            switchLocation.isEnabled = !isLoading
+
+            if (isLoading) {
+                viewProgressbar.animateVisibility(true)
+            } else {
+                viewProgressbar.animateVisibility(false)
+            }
         }
     }
 

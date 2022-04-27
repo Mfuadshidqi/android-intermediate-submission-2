@@ -37,4 +37,11 @@
     <string name="created_at">Diunggah pada </string>
     <string name="title_activity_maps">Peta Activity</string>
     <string name="maps">Peta</string>
+    <string name="share_my_location">Bagikan Lokasi Saya</string>
+    <string name="location_not_found">Lokasi tidak ditemukan, coba lagi</string>
+    <string name="my_location">lokasi saya</string>
+    <string name="map_style_error">Style parsing failed.</string>
+    <string name="map_style_nope">\"Can\'t find style. Error: \"</string>
+    <string name="retry">Coba lagi</string>
+    <string name="timeout">Waktu habis</string>
 </resources>

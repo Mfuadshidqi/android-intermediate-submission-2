@@ -7,11 +7,11 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
-import com.fuad.storyapp.data.response.RegisterResponse
-import com.fuad.storyapp.data.retrofit.ApiService
+import com.fuad.storyapp.data.remote.response.RegisterResponse
+import com.fuad.storyapp.data.remote.retrofit.ApiService
 import java.lang.Exception
 import com.fuad.storyapp.data.Result
-import com.fuad.storyapp.data.response.LoginResponse
+import com.fuad.storyapp.data.remote.response.LoginResponse
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 

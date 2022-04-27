@@ -5,7 +5,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import com.fuad.storyapp.data.repository.UserRepository
-import com.fuad.storyapp.data.retrofit.ApiConfig
+import com.fuad.storyapp.data.remote.retrofit.ApiConfig
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 

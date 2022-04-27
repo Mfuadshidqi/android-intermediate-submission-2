@@ -1,9 +1,9 @@
-package com.fuad.storyapp.data.retrofit
+package com.fuad.storyapp.data.remote.retrofit
 
-import com.fuad.storyapp.data.response.LoginResponse
-import com.fuad.storyapp.data.response.RegisterResponse
-import com.fuad.storyapp.data.response.StoriesResponse
-import com.fuad.storyapp.data.response.UploadStoryResponse
+import com.fuad.storyapp.data.remote.response.LoginResponse
+import com.fuad.storyapp.data.remote.response.RegisterResponse
+import com.fuad.storyapp.data.remote.response.StoriesResponse
+import com.fuad.storyapp.data.remote.response.UploadStoryResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.http.*
